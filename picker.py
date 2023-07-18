@@ -26,6 +26,34 @@ def get_arguments():
         )
 
 
+def uniform_pick(node):
+    def get_leaves(node, leaves=None):
+        if leaves is None:
+            leaves = []
+
+        if isinstance(node, dict):
+            for value in node.values():
+                get_leaves(value, leaves)
+        elif isinstance(node, list):
+            for item in node:
+                get_leaves(item, leaves)
+        else:
+            leaves.append(node)
+
+        return leaves
+
+    while os.path.isdir(node):
+        pick = random.choice(os.listdir(node))
+        node = os.path.join(node, pick)
+
+    with open(node) as file:
+        data = yaml.safe_load(file)
+
+    leaves = get_leaves(data)
+    print(leaves)
+    print(random.choice(leaves))
+
+
 def weighted_pick(node):
     while os.path.isdir(node):
         pick = random.choice(os.listdir(node))
@@ -52,6 +80,8 @@ def main():
     print(node, mode)
 
     match mode:
+        case 'uniform':
+            uniform_pick(node)
         case 'weighted':
             weighted_pick(node)
 
