@@ -42,15 +42,21 @@ def uniform_pick(node):
 
         return leaves
 
-    while os.path.isdir(node):
-        pick = random.choice(os.listdir(node))
-        node = os.path.join(node, pick)
+    files = []
+    leaves = []
 
-    with open(node) as file:
-        data = yaml.safe_load(file)
+    if os.path.isdir(node):
+        for dirpath, _, filenames in os.walk(node):
+            for file in filenames:
+                files.append(f'{dirpath}\{file}')
+    else:
+        files.append(node)
 
-    leaves = get_leaves(data)
-    print(leaves)
+    for file in files:
+        with open(file) as file:
+            data = yaml.safe_load(file)
+        leaves.extend(get_leaves(data))
+
     print(random.choice(leaves))
 
 
