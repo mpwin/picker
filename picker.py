@@ -27,6 +27,18 @@ def get_arguments():
 
 
 def uniform_pick(node):
+    def collect_files(path: str) -> list[str]:
+        files = []
+
+        if os.path.isdir(path):
+            for dirpath, _, filenames in os.walk(path):
+                for file in filenames:
+                    files.append(os.path.join(dirpath, file))
+        else:
+            files.append(path)
+
+        return files
+
     def get_leaves(node, leaves=None):
         if leaves is None:
             leaves = []
@@ -42,15 +54,8 @@ def uniform_pick(node):
 
         return leaves
 
-    files = []
+    files = collect_files(node)
     leaves = []
-
-    if os.path.isdir(node):
-        for dirpath, _, filenames in os.walk(node):
-            for file in filenames:
-                files.append(f'{dirpath}\{file}')
-    else:
-        files.append(node)
 
     for file in files:
         with open(file) as file:
