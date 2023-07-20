@@ -4,7 +4,7 @@ import random
 import yaml
 
 
-def get_arguments():
+def get_arguments() -> tuple[str, str]:
     parser = argparse.ArgumentParser()
     parser.add_argument('path')
     parser.add_argument(
@@ -26,7 +26,7 @@ def get_arguments():
         )
 
 
-def uniform_pick(path):
+def uniform_pick(path: str) -> None:
     def collect_filepaths(path: str) -> list[str]:
         filepaths = []
 
@@ -39,7 +39,7 @@ def uniform_pick(path):
 
         return filepaths
 
-    def collect_leaves(node, path, leaves=None):
+    def collect_leaves(node, path: str, leaves=None) -> list[str]:
         if leaves is None:
             leaves = []
 
@@ -68,7 +68,7 @@ def uniform_pick(path):
     print(random.choice(leaves))
 
 
-def weighted_pick(path):
+def weighted_pick(path: str) -> None:
     while os.path.isdir(path):
         pick = random.choice(os.listdir(path))
         path = os.path.join(path, pick)
