@@ -54,13 +54,16 @@ def uniform_pick(path):
 
         return leaves
 
+    def format_filepath(path: str) -> str:
+        return path.replace('\\', ' -> ').replace('.yaml', '')
+
     filepaths = collect_filepaths(path)
     leaves = []
 
     for filepath in filepaths:
         with open(filepath) as file:
             data = yaml.safe_load(file)
-        leaves.extend(collect_leaves(data, 'path'))
+        leaves.extend(collect_leaves(data, format_filepath(filepath)))
 
     print(random.choice(leaves))
 
