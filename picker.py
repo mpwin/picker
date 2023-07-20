@@ -39,18 +39,18 @@ def uniform_pick(path):
 
         return filepaths
 
-    def get_leaves(node, leaves=None):
+    def get_leaves(node, path, leaves=None):
         if leaves is None:
             leaves = []
 
         if isinstance(node, dict):
-            for value in node.values():
-                get_leaves(value, leaves)
+            for key, value in node.items():
+                get_leaves(value, path + ' -> ' + key, leaves)
         elif isinstance(node, list):
             for item in node:
-                get_leaves(item, leaves)
+                get_leaves(item, path, leaves)
         else:
-            leaves.append(node)
+            leaves.append(path + ' -> ' + node)
 
         return leaves
 
@@ -60,7 +60,7 @@ def uniform_pick(path):
     for filepath in filepaths:
         with open(filepath) as file:
             data = yaml.safe_load(file)
-        leaves.extend(get_leaves(data))
+        leaves.extend(get_leaves(data, 'path'))
 
     print(random.choice(leaves))
 
