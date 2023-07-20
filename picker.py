@@ -26,7 +26,7 @@ def get_arguments():
         )
 
 
-def uniform_pick(node):
+def uniform_pick(path):
     def collect_files(path: str) -> list[str]:
         files = []
 
@@ -54,7 +54,7 @@ def uniform_pick(node):
 
         return leaves
 
-    files = collect_files(node)
+    files = collect_files(path)
     leaves = []
 
     for file in files:
@@ -65,36 +65,36 @@ def uniform_pick(node):
     print(random.choice(leaves))
 
 
-def weighted_pick(node):
-    while os.path.isdir(node):
-        pick = random.choice(os.listdir(node))
-        node = os.path.join(node, pick)
-    print(node)
+def weighted_pick(path):
+    while os.path.isdir(path):
+        pick = random.choice(os.listdir(path))
+        path = os.path.join(path, pick)
+    print(path)
 
-    with open(node) as file:
-        node = random.choice(yaml.safe_load(file))
-    print(node)
+    with open(path) as file:
+        path = random.choice(yaml.safe_load(file))
+    print(path)
 
-    while type(node) is dict or type(node) is list:
-        if type(node) is dict:
-            for k, v in node.items():
+    while type(path) is dict or type(path) is list:
+        if type(path) is dict:
+            for k, v in path.items():
                 print(k, end=' -> ')
-                node = v
+                path = v
 
-        if type(node) is list:
-            node = random.choice(node)
-    print(node)
+        if type(path) is list:
+            path = random.choice(path)
+    print(path)
 
 
 def main():
-    node, mode = get_arguments()
-    print(node, mode)
+    path, mode = get_arguments()
+    print(path, mode)
 
     match mode:
         case 'uniform':
-            uniform_pick(node)
+            uniform_pick(path)
         case 'weighted':
-            weighted_pick(node)
+            weighted_pick(path)
 
 
 if __name__ == '__main__':
