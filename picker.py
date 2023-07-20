@@ -27,17 +27,17 @@ def get_arguments():
 
 
 def uniform_pick(path):
-    def collect_files(path: str) -> list[str]:
-        files = []
+    def collect_filepaths(path: str) -> list[str]:
+        filepaths = []
 
         if os.path.isdir(path):
             for dirpath, _, filenames in os.walk(path):
-                for file in filenames:
-                    files.append(os.path.join(dirpath, file))
+                for filename in filenames:
+                    filepaths.append(os.path.join(dirpath, filename))
         else:
-            files.append(path)
+            filepaths.append(path)
 
-        return files
+        return filepaths
 
     def get_leaves(node, leaves=None):
         if leaves is None:
@@ -54,11 +54,11 @@ def uniform_pick(path):
 
         return leaves
 
-    files = collect_files(path)
+    filepaths = collect_filepaths(path)
     leaves = []
 
-    for file in files:
-        with open(file) as file:
+    for filepath in filepaths:
+        with open(filepath) as file:
             data = yaml.safe_load(file)
         leaves.extend(get_leaves(data))
 
