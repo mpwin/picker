@@ -26,7 +26,7 @@ def get_arguments() -> tuple[str, str]:
         )
 
 
-def uniform_pick(path: str) -> None:
+def uniform_pick(path: str) -> str:
     def collect_filepaths(path: str) -> list[str]:
         filepaths = []
 
@@ -65,10 +65,10 @@ def uniform_pick(path: str) -> None:
             data = yaml.safe_load(file)
         leaves.extend(collect_leaves(data, format_filepath(filepath)))
 
-    print(random.choice(leaves))
+    return random.choice(leaves)
 
 
-def weighted_pick(path: str) -> None:
+def weighted_pick(path: str) -> str:
     while os.path.isdir(path):
         pick = random.choice(os.listdir(path))
         path = os.path.join(path, pick)
@@ -86,7 +86,8 @@ def weighted_pick(path: str) -> None:
 
         if type(path) is list:
             path = random.choice(path)
-    print(path)
+
+    return path
 
 
 def main():
@@ -95,9 +96,11 @@ def main():
 
     match mode:
         case 'uniform':
-            uniform_pick(path)
+            pick = uniform_pick(path)
         case 'weighted':
-            weighted_pick(path)
+            pick = weighted_pick(path)
+
+    print(pick)
 
 
 if __name__ == '__main__':
