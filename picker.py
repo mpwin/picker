@@ -39,7 +39,9 @@ def uniform_pick(path: str) -> str:
 
         return filepaths
 
-    def collect_leaves(node, path: str, leaves=None) -> list[str]:
+    def collect_leaves(
+            node: str | dict | list, path: str, leaves: list[str] | None = None
+            ) -> list[str]:
         if leaves is None:
             leaves = []
 
