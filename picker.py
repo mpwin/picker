@@ -47,16 +47,16 @@ def uniform_pick(path: str) -> str:
 
         if isinstance(node, dict):
             for key, value in node.items():
-                collect_leaves(value, path + ' -> ' + key, leaves)
+                collect_leaves(value, os.path.join(path, key), leaves)
         elif isinstance(node, list):
             for item in node:
                 collect_leaves(item, path, leaves)
         else:
-            leaves.append(path + ' -> ' + node)
+            leaves.append(os.path.join(path, node))
 
         return leaves
 
-    def format_filepath(path: str) -> str:
+    def format_path(path: str) -> str:
         return path.replace('\\', ' -> ').replace('.yaml', '')
 
     filepaths = collect_filepaths(path)
@@ -65,9 +65,9 @@ def uniform_pick(path: str) -> str:
     for filepath in filepaths:
         with open(filepath) as file:
             data = yaml.safe_load(file)
-        leaves.extend(collect_leaves(data, format_filepath(filepath)))
+        leaves.extend(collect_leaves(data, filepath))
 
-    return random.choice(leaves)
+    return format_path(random.choice(leaves))
 
 
 def weighted_pick(path: str) -> str:
