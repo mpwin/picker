@@ -63,6 +63,7 @@ def uniform_pick(path: str) -> str:
             data = yaml.safe_load(file)
         leaves.extend(collect_leaves(data, filepath))
 
+    print(f'Uniform Pick | {len(leaves)} Leaves')
     return format_path(random.choice(leaves))
 
 
@@ -90,7 +91,6 @@ def weighted_pick(path: str) -> str:
 
 def main():
     path, mode = get_arguments()
-    print(path, mode)
 
     match mode:
         case 'uniform':
