@@ -1,6 +1,7 @@
 import argparse
 import os
 import random
+from typing import Iterator
 import yaml
 
 
@@ -27,17 +28,13 @@ def get_arguments() -> tuple[str, str]:
 
 
 def uniform_pick(path: str) -> str:
-    def collect_filepaths(path: str) -> list[str]:
-        filepaths = []
-
+    def yield_filepaths(path: str) -> Iterator[str]:
         if os.path.isdir(path):
             for dirpath, _, filenames in os.walk(path):
                 for filename in filenames:
-                    filepaths.append(os.path.join(dirpath, filename))
+                    yield os.path.join(dirpath, filename)
         else:
-            filepaths.append(path)
-
-        return filepaths
+            yield path
 
     def collect_leaves(
             node: str | dict | list, path: str, leaves: list[str] | None = None
@@ -59,10 +56,9 @@ def uniform_pick(path: str) -> str:
     def format_path(path: str) -> str:
         return path.replace('\\', ' -> ').replace('.yaml', '')
 
-    filepaths = collect_filepaths(path)
     leaves = []
 
-    for filepath in filepaths:
+    for filepath in yield_filepaths(path):
         with open(filepath) as file:
             data = yaml.safe_load(file)
         leaves.extend(collect_leaves(data, filepath))
