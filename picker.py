@@ -53,9 +53,6 @@ def uniform_pick(path: str) -> str:
 
         return leaves
 
-    def format_path(path: str) -> str:
-        return path.replace('\\', ' -> ').replace('.yaml', '')
-
     leaves = []
 
     for filepath in yield_filepaths(path):
@@ -71,22 +68,25 @@ def weighted_pick(path: str) -> str:
     while os.path.isdir(path):
         pick = random.choice(os.listdir(path))
         path = os.path.join(path, pick)
-    print(path)
 
     with open(path) as file:
-        path = random.choice(yaml.safe_load(file))
-    print(path)
+        pick = random.choice(yaml.safe_load(file))
 
-    while type(path) is dict or type(path) is list:
-        if type(path) is dict:
-            for k, v in path.items():
-                print(k, end=' -> ')
-                path = v
+    while type(pick) is dict or type(pick) is list:
+        if type(pick) is dict:
+            for key, value in pick.items():
+                path = os.path.join(path, key)
+                pick = value
 
-        if type(path) is list:
-            path = random.choice(path)
+        if type(pick) is list:
+            pick = random.choice(pick)
 
-    return path
+    print('Weighted Pick')
+    return format_path(os.path.join(path, pick))
+
+
+def format_path(path: str) -> str:
+    return path.replace('\\', ' -> ').replace('.yaml', '')
 
 
 def main():
