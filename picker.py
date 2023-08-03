@@ -44,7 +44,7 @@ def uniform_pick(path: str) -> str:
 
         if isinstance(node, dict):
             for key, value in node.items():
-                collect_leaves(value, os.path.join(path, key), leaves)
+                collect_leaves(value, os.path.join(path, str(key)), leaves)
         elif isinstance(node, list):
             for item in node:
                 collect_leaves(item, path, leaves)
