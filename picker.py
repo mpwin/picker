@@ -49,7 +49,7 @@ def uniform_pick(path: str) -> str:
             for item in node:
                 collect_leaves(item, path, leaves)
         else:
-            leaves.append(os.path.join(path, node))
+            leaves.append(os.path.join(path, str(node)))
 
         return leaves
 
